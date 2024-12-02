@@ -36,7 +36,27 @@ pub fn part_one(input: &str) -> Option<u32> {
 }
 
 pub fn part_two(input: &str) -> Option<u32> {
-    None
+    let levels = parse_input(input);
+
+    Some(
+        levels
+            .iter()
+            .filter(|l| {
+                if are_levels_safe(l) {
+                    true
+                } else {
+                    for i in 0..l.len() {
+                        let mut l2 = (*l).clone();
+                        l2.remove(i);
+                        if are_levels_safe(&l2) {
+                            return true;
+                        }
+                    }
+                    false
+                }
+            })
+            .count() as u32,
+    )
 }
 
 #[cfg(test)]
@@ -70,12 +90,12 @@ mod tests {
     #[test]
     fn test_part_one() {
         let result = part_one(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, None);
+        assert_eq!(result, Some(2));
     }
 
     #[test]
     fn test_part_two() {
         let result = part_two(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, None);
+        assert_eq!(result, Some(4));
     }
 }
